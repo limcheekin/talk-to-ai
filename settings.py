@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     # STT configuration
     STT_BASE_URL: str = Field(..., description="Base URL for the STT service")
-    STT_API_KEY: SecretStr = Field("", description="Optional API key for the STT service")
+    STT_API_KEY: SecretStr = Field("", description="API key for the STT service")
     STT_MODEL: str = Field(..., description="Model name for the STT service")
     STT_RESPONSE_FORMAT: str = Field(..., description="Response format for the STT service")
     LANGUAGE: str = Field("en", description="Language setting for the STT service")

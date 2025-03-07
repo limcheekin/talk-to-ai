@@ -1,17 +1,18 @@
 from io import BytesIO
 from openai import OpenAI, AsyncOpenAI
+from pydantic import SecretStr
 
 class SpeechClient:
   def __init__(self,  
-               stt_base_url: str, 
+               stt_base_url: str,
+               stt_api_key: SecretStr, 
                stt_model: str,
                stt_response_format: str,  
                tts_base_url: str,
-               tts_api_key: str, 
+               tts_api_key: SecretStr, 
                tts_model: str,
                tts_voice: str,
-               tts_backend: str,  
-               stt_api_key: str = 'dummy_api_key',
+               tts_backend: str,
                language: str = 'en'):
     self.__stt_base_url = stt_base_url
     self.__stt_model = stt_model
@@ -26,7 +27,7 @@ class SpeechClient:
     
 
   def speech_to_text(self, audio_file: tuple) -> str:
-    client = OpenAI(api_key=self.__stt_api_key, base_url=self.__stt_base_url)
+    client = OpenAI(api_key=self.__stt_api_key.get_secret_value(), base_url=self.__stt_base_url)
     response = client.audio.transcriptions.create(
         model=self.__stt_model,
         file=audio_file,
@@ -36,7 +37,7 @@ class SpeechClient:
     return response.text
 
   def text_to_speech(self, text: str) -> bytes:
-    client = OpenAI(api_key=self.__tts_api_key, base_url=self.__tts_base_url)
+    client = OpenAI(api_key=self.__tts_api_key.get_secret_value(), base_url=self.__tts_base_url)
     response = client.audio.speech.create(
                 model=self.__tts_model,
                 voice=self.__tts_voice,
