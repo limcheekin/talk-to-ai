@@ -34,7 +34,7 @@ speech_client = SpeechClient(
     tts_audio_format=settings.TTS_AUDIO_FORMAT,
     language=settings.LANGUAGE,
 )
-llm_client = AsyncOpenAI(api_key=settings.LLM_API_KEY, base_url=settings.LLM_BASE_URL)
+llm_client = AsyncOpenAI(api_key=settings.LLM_API_KEY.get_secret_value(), base_url=settings.LLM_BASE_URL)
 curr_dir = Path(__file__).parent
 
 async def async_response(audio, chatbot=None):
