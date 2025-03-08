@@ -17,7 +17,7 @@ from gradio.utils import get_space
 from pydantic import BaseModel
 from speech import SpeechClient
 from settings import get_settings
-from openai import OpenAI, AsyncOpenAI
+from openai import AsyncOpenAI
 import asyncio
 
 settings = get_settings()
@@ -31,33 +31,11 @@ speech_client = SpeechClient(
     tts_model=settings.TTS_MODEL,
     tts_voice=settings.TTS_VOICE,
     tts_backend=settings.TTS_BACKEND,
+    tts_audio_format=settings.TTS_AUDIO_FORMAT,
     language=settings.LANGUAGE,
 )
 llm_client = AsyncOpenAI(api_key=settings.LLM_API_KEY, base_url=settings.LLM_BASE_URL)
-tts_client = OpenAI(api_key=settings.TTS_API_KEY, base_url=settings.TTS_BASE_URL)
 curr_dir = Path(__file__).parent
-
-async def process_tts_chunk(text, chatbot):
-    """Process a text chunk and yield audio data sequentially.
-    
-    This function creates a streaming TTS response and yields each audio chunk
-    as it becomes available, allowing for real-time audio playback.
-    """
-    try:
-        with tts_client.audio.speech.with_streaming_response.create(
-            model=settings.TTS_MODEL,
-            voice=settings.TTS_VOICE,
-            input=text,
-            response_format=settings.TTS_AUDIO_FORMAT,
-            extra_body={"backend": settings.TTS_BACKEND, "language": settings.LANGUAGE},
-        ) as stream_audio:
-            # Iterate through all audio chunks in the stream
-            for i, audio_chunk in enumerate(stream_audio.iter_bytes(chunk_size=1024)):
-                print(f"Processing audio chunk {i}")
-                audio_array = np.frombuffer(audio_chunk, dtype=np.int16).reshape(1, -1)
-                yield (24000, audio_array)
-    except Exception as e:
-        print(f"Error in TTS processing: {e}")
 
 async def async_response(audio, chatbot=None):
     """Asynchronous response function with optimized streaming."""
@@ -65,7 +43,7 @@ async def async_response(audio, chatbot=None):
     messages = [{"role": d["role"], "content": d["content"]} for d in chatbot]
     
     # Process STT
-    prompt = speech_client.speech_to_text(("audio-file.mp3", audio_to_bytes(audio)))
+    prompt = await speech_client.speech_to_text(("audio-file.mp3", audio_to_bytes(audio)))
     chatbot.append({"role": "user", "content": prompt})
     yield AdditionalOutputs(chatbot)
     messages.append({"role": "user", "content": prompt})
@@ -98,14 +76,14 @@ async def async_response(audio, chatbot=None):
         # Check if we have a complete sentence or significant phrase
         if ('.' in content or '!' in content or '?' in content or '\n' in content) and len(sentence_buffer) > 15:
             # Process this sentence for TTS - use async for to iterate through yielded chunks
-            async for audio_data in process_tts_chunk(sentence_buffer, chatbot):
+            async for audio_data in speech_client.text_to_speech_stream(sentence_buffer):
                 yield audio_data
             
             sentence_buffer = ""
     
     # Process any remaining text in the buffer
     if sentence_buffer:
-        async for audio_data in process_tts_chunk(sentence_buffer, chatbot):
+        async for audio_data in speech_client.text_to_speech_stream(sentence_buffer):
             yield audio_data
     
     # Update chat history
