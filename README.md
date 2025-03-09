@@ -280,7 +280,7 @@ This project builds upon and integrates numerous open-source projects and commer
 - [FastWhisperAPI](https://github.com/3choff/FastWhisperAPI) - For efficient speech recognition
 - [MLC LLM](https://llm.mlc.ai/) - For local deployment of language models
 - [FastKoko](https://github.com/remsky/Kokoro-FastAPI/) - For local text-to-speech synthesis
-- [Kokoro](https://github.com/sigmatics/kokoro) - The underlying TTS model for FastKoko
+- [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) - The underlying TTS model for FastKoko
 
 ### Cloud Services
 - [Groq](https://groq.com/) - For cloud LLM and STT services
