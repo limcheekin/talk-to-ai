@@ -39,7 +39,7 @@ The application has been tested with the following API combinations:
 ### 1. Local APIs    
 - **STT**: [LocalAI with whisper.cpp backend](https://localai.io/features/audio-to-text/), [FastWhisperAPI](https://github.com/3choff/FastWhisperAPI)    
 - **LLM**: [LocalAI with llama.cpp backend](https://localai.io/features/text-generation/), [MLC LLM](https://llm.mlc.ai/)
-- **TTS**: [LocalAI with Piper backend](https://localai.io/features/text-to-audio/), [`FastKoko`](https://github.com/remsky/Kokoro-FastAPI/)  
+- **TTS**: [LocalAI with Piper backend](https://localai.io/features/text-to-audio/), [FastKoko](https://github.com/remsky/Kokoro-FastAPI/)  
 
 ### 2. Cloud APIs    
 - **STT**: [Groq](https://console.groq.com/docs/speech-to-text)    
