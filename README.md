@@ -23,13 +23,13 @@ The application follows a modular architecture with the following components:
 │   Web Browser  │<────>│  FastRTC API   │<────>│  OpenAI API    │
 │  (WebRTC+UI)   │      │  (Python App)  │      │(Local or Cloud)│
 └────────────────┘      └────────────────┘      └────────────────┘
-                               │                       ▲
-                               │                       │
-                               ▼                       │
-                        ┌────────────────┐      ┌────────────────┐
-                        │   TTS Server   │      │   STT Server   │
-                        │(Local or Cloud)│      │(Local or Cloud)│
-                        └────────────────┘      └────────────────┘
+                                                       ▲
+                               │───────────────────────│───────────────────────│
+                               ▼                       ▼                       ▼
+                        ┌────────────────┐      ┌────────────────┐     ┌────────────────┐
+                        │   STT Server   │      │   LLM Server   │     │   TTS Server   │
+                        │(Local or Cloud)│      │(Local or Cloud)│     │(Local or Cloud)│
+                        └────────────────┘      └────────────────┘     └────────────────┘
 ```
 
 ## API Compatibility
