@@ -53,7 +53,6 @@ The application has been tested with the following API combinations:
 - **WebRTC Integration**: Low-latency audio streaming with network traversal capability
 - **Progressive TTS Playback**: Audio responses begin playing as soon as sentences are completed
 - **Responsive Audio Visualization**: Visual feedback of audio input/output
-- **Persistent Chat History**: Complete conversation history is maintained
 - **Configurable AI Models**: Easily switch between different AI models
 - **Customizable Voice Settings**: Configure voice, language and audio format
 - **Multiple Deployment Options**: UI, API, or phone integration
